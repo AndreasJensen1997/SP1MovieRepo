@@ -1,0 +1,100 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+class Movie{
+-int id
+-String language
+-String overview
+-List<Director> directors
+-List<Actor> actors
+-String title
+-LocalDate releaseDate
+-double rating
+-List<Genre> genres
+-String posterURL
+}
+
+class Actor{
+-int id
+-String name
+-LocalDate birthDate
+-String pictureURL
+-List<Movie> movies
+}
+
+class Director{
+-int id
+-String name
+-String pictureURL
+-List<Movie> movies
+}
+
+enum Genre{
+ String name
+}
+
+class MovieDTO{
+- String original_title
+- String overview
+- String original_language
+- LocalDate release_date
+- Genre genres[String name]
+- double vote_average //rating
+- String poster_path
+- int vote_count
+- CreditRecord creditRecord
+}
+
+record CreditRecord{
+List<Cast> cast
+}
+
+record Cast{
+String known_for_department
+String original_name
+String character
+String profile_path
+String job
+}
+
+class MovieDAO extends GenericDAO{
++getMoviesByGenre(Genre genre)
+}
+
+class DirectorDAO extends GenericDAO{
++getAllDirectorsByMovieID(int id)
+}
+
+class ActorDAO extends GenericDAO{
++getAllActorsByMovieID(int id)
+}
+
+interface IDAO{
+basicCruds()
+}
+
+abstract class GenericDAO implements IDAO{
++ basicCruds()
+}
+
+class APIReader{
++ getAllIdsDanishMoviesLast15Years()
++ getMovieDTOByIds(List<Integer> ids)
++ MovieDTO getMovieById(String id)
+}
+
+class MovieService{
++ convertMovieDTOToEntity(List<MovieDTO> movieDtos)
+- convertMovieDTOToMovie(List<MovieDTO> movieDtos)
+- convertMovieDTOToActor(List<MovieDTO> movieDtos)
+- convertMovieDTOToDirector(List<MovieDTO> movieDtos)
+
+}
+
+Movie "*" -- "*" Actor
+Movie "*" -- "*" Director
+
+
+
+
+@enduml
