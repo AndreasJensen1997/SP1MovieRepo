@@ -1,12 +1,10 @@
 package app.entities;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -19,8 +17,9 @@ public class Actor {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
     String name;
-    LocalDate birthDate;
     String pictureURL;
+    String character;
     @ManyToMany
-    List<Movie> movies;
+    @Builder.Default
+    List<Movie> movies = new ArrayList<>();
 }

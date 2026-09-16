@@ -1,16 +1,16 @@
 package app.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Setter;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
-public record Cast(@JsonProperty("known_for_department")
+public record Crew(@JsonProperty("known_for_department")
                    String knownForDepartment,
 
                    @JsonProperty("original_name")
                    String originalName,
 
-                   String character,
-
                    @JsonProperty("profile_path")
-                   String imageUrl) {}
+                   String imageUrl,
+
+                   @JsonProperty("job")
+                   String job) {}

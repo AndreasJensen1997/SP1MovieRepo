@@ -19,5 +19,6 @@ public enum Genre {
     TV_MOVIE,
     THRILLER,
     WAR,
-    WESTERN;
+    WESTERN,
+    OTHER
 }

@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -20,5 +21,6 @@ public class Director {
     String name;
     String pictureUrl;
     @ManyToMany
-    List<Movie> movies;
+    @Builder.Default
+    List<Movie> movies = new ArrayList<>();
 }

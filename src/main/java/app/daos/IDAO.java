@@ -1,17 +1,14 @@
 package app.daos;
 
 import java.util.List;
+import java.util.Set;
 
 public interface IDAO <T, I>{
 
-    T create(T t);
-
-    T get(I i);
-
-    List<T> getAll();
-
-    T update(T t);
-
-    boolean delete(T t);
+    public T create(T t);
+    public T read(I id);
+    public Set<T> readAll();
+    public T update(T t);
+    public boolean delete(T t);
 
 }
