@@ -20,7 +20,7 @@ public class Director {
     Integer id;
     String name;
     String pictureUrl;
-    @ManyToMany
+    @ManyToMany()
     @Builder.Default
     List<Movie> movies = new ArrayList<>();
 }

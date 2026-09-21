@@ -1,6 +1,7 @@
 package app.daos;
 
 import app.config.HibernateTestConfig;
+import app.entities.Director;
 import app.entities.Movie;
 import app.exceptions.ApiException;
 import app.exceptions.DatabaseException;
@@ -13,8 +14,7 @@ import java.util.List;
 import java.util.Set;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -63,7 +63,7 @@ class MovieDAOTest {
 
     @Test
     void readAll() {
-        Set<Movie> movies = Set.of(seeded.movie1(), seeded.movie2());
+        Set<Movie> movies = Set.of(seeded.movie1(), seeded.movie2(), seeded.movie3());
         Set<Movie> fetchedMovies = movieDAO.readAll();
         assertThat(fetchedMovies, notNullValue());
         assertThat(fetchedMovies.size(), is(movies.size()));
@@ -152,5 +152,52 @@ class MovieDAOTest {
 
         DatabaseException ex = assertThrows(DatabaseException.class, () -> movieDAO.delete(movie));
         assertThat(ex.getMessage(), is("Delete Movie failed"));
+    }
+
+    @Test
+    void getMovieByDirectorWithNullId_throwsDatabaseException() {
+        DatabaseException ex = assertThrows(DatabaseException.class, () -> movieDAO.allMoviesByDirectorId(null));
+        assertThat(ex.getMessage(), is("DirectorID is required"));
+    }
+
+    @Test
+    void getMovieByDirectorWithMissingId_throwsDatabaseException() {
+        Movie movie = Movie.builder()
+                .id(999_999)
+                .title("not existing")
+                .build();
+        DatabaseException ex = assertThrows(DatabaseException.class, () -> movieDAO.allMoviesByDirectorId(movie.getId()));
+        assertThat(ex.getMessage(), is("No movies by found by directorId: " + 999_999 + " in db"));
+    }
+
+
+    @Test
+    void getMoviesByTitle_shouldShowAllMatches() {
+        List<Movie> moviesByTitle = movieDAO.getMoviesByTitle("cept");
+        assertThat(moviesByTitle.size(), is(2));
+        for (Movie movie : moviesByTitle) {
+            assertThat(movie.getTitle(), is(anyOf(equalToIgnoringCase("inception"), equalToIgnoringCase("I have sceptum piercing"))));
+        }
+    }
+
+    @Test
+    void getRatingByMovies() {
+        double averageRating = movieDAO.getAverageRatingOfAllMovies();
+
+        assertThat(averageRating, is(6.333333333333333));
+    }
+
+    @Test
+    void getTop10HighestRatedMovies() {
+        List<Movie> movies = movieDAO.getTopTenHighestRatedMovies();
+        assertThat(movies.size(), is(3));
+        assertThat(movies, contains(seeded.movie2(), seeded.movie1(), seeded.movie3()));
+    }
+
+    @Test
+    void getTop10LowestRatedMovies() {
+        List<Movie> movies = movieDAO.getTopTenLowestRatedMovies();
+        assertThat(movies.size(), is(3));
+        assertThat(movies, contains(seeded.movie3(), seeded.movie1(), seeded.movie2()));
     }
 }

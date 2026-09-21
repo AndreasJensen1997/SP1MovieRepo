@@ -17,6 +17,7 @@ import jakarta.persistence.EntityManagerFactory;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class MovieService {
     private EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory();
@@ -101,8 +102,17 @@ public class MovieService {
                     .pictureURL(cast.imageUrl())
                     .build();
 
-            actorDAO.create(actor);
-            actors.add(actor);
+
+            Set<Actor> allActorsInDb = actorDAO.readAll();
+            for (Actor actor1 : allActorsInDb) {
+                if (actor.getName().equalsIgnoreCase(actor1.getName())) {
+                    Actor fetchedActor = actorDAO.read(actor1.getId());
+                    actors.add(fetchedActor);
+                } else {
+                    Actor actor2 = actorDAO.create(actor);
+                    actors.add(actor2);
+                }
+            }
         }
         return actors;
 
@@ -117,8 +127,17 @@ public class MovieService {
                     .name(crew.originalName())
                     .pictureUrl(crew.imageUrl())
                     .build();
-            directorDAO.create(director);
-            directors.add(director);
+
+            Set<Director> allDirectorsInDb = directorDAO.readAll();
+            for (Director director1 : allDirectorsInDb) {
+                if (director.getName().equalsIgnoreCase(director1.getName())) {
+                    Director fetchedDirector = directorDAO.read(director1.getId());
+                    directors.add(fetchedDirector);
+                } else {
+                    Director director2 = directorDAO.create(director);
+                    directors.add(director2);
+                }
+            }
         }
         return directors;
     }

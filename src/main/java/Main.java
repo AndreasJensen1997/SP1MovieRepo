@@ -1,3 +1,4 @@
+import app.daos.MovieDAO;
 import app.dto.MovieDTO;
 import app.entities.Movie;
 import app.services.MovieService;
@@ -17,6 +18,5 @@ public class Main {
         List<Movie> movies = movieService.persistEntities(movieDTOS);
         System.out.println(movies.getFirst().getId());
         System.out.println(movies.size());
-
     }
 }

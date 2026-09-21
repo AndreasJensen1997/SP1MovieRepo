@@ -19,16 +19,6 @@ public class APIReader {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-
-    public <T> T getWithJacksonGeneric(String url, Class<T> tClass){
-        try {
-            JsonNode node = objectMapper.readTree(new URI(url).toURL().openStream());
-            return objectMapper.treeToValue(node, tClass);
-        } catch (JacksonException | IOException | URISyntaxException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     public List<Integer> getAllIdsDanishMoviesLast15Years(){
 
         String baseUrl = "https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=da-DK&page=1&primary_release_date.gte=1980-01-01&sort_by=popularity.desc&vote_count.gte=2&with_original_language=da&api_key="+ System.getenv("API_KEY");
@@ -40,7 +30,7 @@ public class APIReader {
 
             List<Integer> movieIds = new ArrayList<>();
             List<String> urls = new ArrayList<>();
-            for (int i = 1; i <= 5; i++) {
+            for (int i = 1; i <= pageCount; i++) {
                 String url3 = pageIdUrl.replace("$", String.valueOf(i));
                 urls.add(url3);
             }

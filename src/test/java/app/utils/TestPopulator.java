@@ -16,7 +16,7 @@ public class TestPopulator {
 
             Actor actor1, Actor actor2,
             Director director1, Director director2,
-            Movie movie1, Movie movie2
+            Movie movie1, Movie movie2, Movie movie3
     ) {
     }
 
@@ -44,18 +44,21 @@ public class TestPopulator {
             em.persist(director1);
             em.persist(director2);
 
-            Movie movie1 = Movie.builder().title("Terkel i knibe").genres(List.of(Genre.CRIME, Genre.ANIMATION)).build();
-            Movie movie2 = Movie.builder().title("Inception").genres(List.of(Genre.ACTION,Genre.SCIENCE_FICTION)).build();
+            Movie movie1 = Movie.builder().title("Terkel i knibe").genres(List.of(Genre.CRIME, Genre.ANIMATION)).rating(8).build();
+            Movie movie2 = Movie.builder().title("Inception").genres(List.of(Genre.ACTION,Genre.SCIENCE_FICTION)).rating(9).build();
+            Movie movie3 = Movie.builder().title("I have sceptum piercing").genres(List.of(Genre.DRAMA,Genre.SCIENCE_FICTION)).rating(2).build();
             movie1.addDirectors(List.of(director1, director2));
+
             em.persist(movie1);
             em.persist(movie2);
+            em.persist(movie3);
 
             em.getTransaction().commit();
 
             return new SeededData(
                     actor1,actor2,
                     director1,director2,
-                    movie1,movie2);
+                    movie1,movie2,movie3);
 
         }
     }
